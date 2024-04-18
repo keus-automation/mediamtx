@@ -165,6 +165,7 @@ func (s *httpServer) onWHIPOptions(ctx *gin.Context, path string, publish bool) 
 }
 
 func (s *httpServer) onWHIPPost(ctx *gin.Context, path string, publish bool) {
+	fmt.Println("THis is WHIP  POST request")
 	if ctx.Request.Header.Get("Content-Type") != "application/sdp" {
 		writeError(ctx, http.StatusBadRequest, fmt.Errorf("invalid Content-Type"))
 		return
@@ -209,6 +210,7 @@ func (s *httpServer) onWHIPPost(ctx *gin.Context, path string, publish bool) {
 }
 
 func (s *httpServer) onWHIPPatch(ctx *gin.Context, rawSecret string) {
+	fmt.Println("THis is WHIP  PATCH  request")
 	secret, err := uuid.Parse(rawSecret)
 	if err != nil {
 		writeError(ctx, http.StatusBadRequest, fmt.Errorf("invalid secret"))
@@ -290,6 +292,7 @@ func (s *httpServer) onRequest(ctx *gin.Context) {
 		return
 	}
 
+	fmt.Println("ctx.Request.URL.Path", ctx.Request.URL.Path)
 	// WHIP/WHEP, outside session
 	if m := reWHIPWHEPNoID.FindStringSubmatch(ctx.Request.URL.Path); m != nil {
 		switch ctx.Request.Method {

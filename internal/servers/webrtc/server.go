@@ -190,18 +190,22 @@ type Server struct {
 	IPsFromInterfacesList []string
 	AdditionalHosts       []string
 	ICEServers            []conf.WebRTCICEServer
+	KeusSSAddress         string
+	KeusSSPort            string
+	KeusSSToken           string
 	ExternalCmdPool       *externalcmd.Pool
 	PathManager           serverPathManager
 	Parent                serverParent
 
-	ctx              context.Context
-	ctxCancel        func()
-	httpServer       *httpServer
-	udpMuxLn         net.PacketConn
-	tcpMuxLn         net.Listener
-	api              *pwebrtc.API
-	sessions         map[*session]struct{}
-	sessionsBySecret map[uuid.UUID]*session
+	ctx                 context.Context
+	ctxCancel           func()
+	httpServer          *httpServer
+	keusSignalingServer *keusSignalingServer
+	udpMuxLn            net.PacketConn
+	tcpMuxLn            net.Listener
+	api                 *pwebrtc.API
+	sessions            map[*session]struct{}
+	sessionsBySecret    map[uuid.UUID]*session
 
 	// in
 	chNewSession           chan webRTCNewSessionReq
@@ -232,6 +236,19 @@ func (s *Server) Initialize() error {
 	s.chAPISessionsGet = make(chan serverAPISessionsGetReq)
 	s.chAPIConnsKick = make(chan serverAPISessionsKickReq)
 	s.done = make(chan struct{})
+
+	s.keusSignalingServer = &keusSignalingServer{
+		address: s.KeusSSAddress,
+		port:    s.KeusSSPort,
+		token:   s.KeusSSToken,
+	}
+
+	errKS := s.keusSignalingServer.initialize()
+	if errKS != nil {
+		ctxCancel()
+		fmt.Println(errKS.Error())
+		return errKS
+	}
 
 	s.httpServer = &httpServer{
 		address:        s.Address,

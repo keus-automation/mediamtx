@@ -216,6 +216,9 @@ type Conf struct {
 	WebRTCICETCPMuxAddress      *string           `json:"webrtcICETCPMuxAddress,omitempty"`  // deprecated
 	WebRTCICEHostNAT1To1IPs     *[]string         `json:"webrtcICEHostNAT1To1IPs,omitempty"` // deprecated
 	WebRTCICEServers            *[]string         `json:"webrtcICEServers,omitempty"`        // deprecated
+	WebrtcKSAddress             string            `json:"webrtcKSAddress"`
+	WebrtcKSPort                string            `json:"webrtcKSPort"`
+	WebrtcKSToken               string            `json:"webrtcKSToken"`
 
 	// SRT server
 	SRT        bool   `json:"srt"`

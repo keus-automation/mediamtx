@@ -18,6 +18,8 @@ type OutgoingTrack struct {
 func newOutgoingTrack(forma format.Format, addTrack addTrackFunc) (*OutgoingTrack, error) {
 	t := &OutgoingTrack{}
 
+	fmt.Println("This is outgoing track $$$$$$$$$$$$$$$", forma.Codec(), forma.PayloadType())
+
 	switch forma := forma.(type) {
 	case *format.AV1:
 		var err error
@@ -77,6 +79,7 @@ func newOutgoingTrack(forma format.Format, addTrack addTrackFunc) (*OutgoingTrac
 
 	case *format.Opus:
 		var err error
+		fmt.Println("this is outgoing track ------------------------------------")
 		t.track, err = webrtc.NewTrackLocalStaticRTP(
 			webrtc.RTPCodecCapability{
 				MimeType:  webrtc.MimeTypeOpus,

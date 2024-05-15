@@ -8,9 +8,9 @@ import (
 	"time"
 
 	"github.com/bluenviron/gortsplib/v4/pkg/format"
-	"github.com/pion/webrtc/v3"
-
 	"github.com/bluenviron/mediamtx/internal/logger"
+
+	"github.com/pion/webrtc/v3"
 )
 
 const (
@@ -83,10 +83,13 @@ func (co *PeerConnection) Start() error {
 		}
 
 		co.wr.OnTrack(func(track *webrtc.TrackRemote, receiver *webrtc.RTPReceiver) {
-			select {
-			case co.incomingTrack <- trackRecvPair{track, receiver}:
-			case <-co.ctx.Done():
-			}
+			fmt.Println("Recived Track", track.Codec(), track.PayloadType())
+			initTalkback()
+			onAudioTrackHandler(co.wr, track)
+			// select {
+			// case co.incomingTrack <- trackRecvPair{track, receiver}:
+			// case <-co.ctx.Done():
+			// }
 		})
 	}
 
@@ -100,6 +103,7 @@ func (co *PeerConnection) Start() error {
 		default:
 		}
 
+		fmt.Println("Connection State Changed", state.String())
 		co.Log.Log(logger.Debug, "peer connection state: "+state.String())
 
 		switch state {
@@ -249,6 +253,7 @@ func (co *PeerConnection) GatherIncomingTracks(
 			return nil, fmt.Errorf("deadline exceeded while waiting tracks")
 
 		case pair := <-co.incomingTrack:
+			fmt.Println("There is an incoming track received from outside")
 			track, err := newIncomingTrack(pair.track, pair.receiver, co.wr.WriteRTCP, co.Log)
 			if err != nil {
 				return nil, err

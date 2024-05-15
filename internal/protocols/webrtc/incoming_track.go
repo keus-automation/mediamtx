@@ -43,6 +43,8 @@ func newIncomingTrack(
 
 	isVideo := false
 
+	fmt.Println("This is incoming track works like charm")
+
 	switch strings.ToLower(track.Codec().MimeType) {
 	case strings.ToLower(webrtc.MimeTypeAV1):
 		isVideo = true

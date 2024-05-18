@@ -1,7 +1,7 @@
-github.com/MicahParks/jwkset v0.5.17 h1:DrcwyKwSP5adD0G2XJTvDulnWXjD6gbjROMgMXDbkKA=
-github.com/MicahParks/jwkset v0.5.17/go.mod h1:q8ptTGn/Z9c4MwbcfeCDssADeVQb3Pk7PnVxrvi+2QY=
-github.com/MicahParks/keyfunc/v3 v3.3.2 h1:YTtwc4dxalBZKFqHhqctBWN6VhbLdGhywmne9u5RQVM=
-github.com/MicahParks/keyfunc/v3 v3.3.2/go.mod h1:GJBeEjnv25OnD9y2OYQa7ELU6gYahEMBNXINZb+qm34=
+github.com/MicahParks/jwkset v0.5.18 h1:WLdyMngF7rCrnstQxA7mpRoxeaWqGzPM/0z40PJUK4w=
+github.com/MicahParks/jwkset v0.5.18/go.mod h1:q8ptTGn/Z9c4MwbcfeCDssADeVQb3Pk7PnVxrvi+2QY=
+github.com/MicahParks/keyfunc/v3 v3.3.3 h1:c6j9oSu1YUo0k//KwF1miIQlEMtqNlj7XBFLB8jtEmY=
+github.com/MicahParks/keyfunc/v3 v3.3.3/go.mod h1:f/UMyXdKfkZzmBeBFUeYk+zu066J1Fcl48f7Wnl5Z48=
 github.com/abema/go-mp4 v1.2.0 h1:gi4X8xg/m179N/J15Fn5ugywN9vtI6PLk6iLldHGLAk=
 github.com/abema/go-mp4 v1.2.0/go.mod h1:vPl9t5ZK7K0x68jh12/+ECWBCXoWuIDtNgPtU2f04ws=
 github.com/alecthomas/assert/v2 v2.6.0 h1:o3WJwILtexrEUk3cUVal3oiQY2tfgr/FHWiz/v2n4FU=
@@ -22,8 +22,8 @@ github.com/benburkert/openpgp v0.0.0-20160410205803-c2471f86866c h1:8XZeJrs4+ZYh
 github.com/benburkert/openpgp v0.0.0-20160410205803-c2471f86866c/go.mod h1:x1vxHcL/9AVzuk5HOloOEPrtJY0MaalYr78afXZ+pWI=
 github.com/bluenviron/gohlslib v1.3.2 h1:xRiPfMIeYCkspL6jYa7Qrl4pIY+1w7IvFjx49CsyfKY=
 github.com/bluenviron/gohlslib v1.3.2/go.mod h1:1/m7A2o5IWyBdZeauXe2bViu2l1mL2l8DMQl9302A2U=
-github.com/bluenviron/gortsplib/v4 v4.9.0 h1:Zm/XuKDBQrU0Hcm4wqBhGX0U3hUAVh0Wm7cvJpbJWyU=
-github.com/bluenviron/gortsplib/v4 v4.9.0/go.mod h1:0XtUPbNFHNpMz4Sa70PmSelvclWTTJujHfSKkhuLpxg=
+github.com/bluenviron/gortsplib/v4 v4.9.1-0.20240515082130-f283abc2e7cd h1:w1Uml4bXdixu7cArQ3JyiZTpaKzZ31eP9+bWoPPkWcY=
+github.com/bluenviron/gortsplib/v4 v4.9.1-0.20240515082130-f283abc2e7cd/go.mod h1:iLJ1tmwGMbaN04ZYh/KRlAHsCbz9Rycn7cPAvdR+Vkc=
 github.com/bluenviron/mediacommon v1.10.0 h1:ffIWaS+1vYpPLV6QOt4VEvIlb/OKtodzagzsY6EDOnw=
 github.com/bluenviron/mediacommon v1.10.0/go.mod h1:HDyW2CzjvhYJXtdxstdFPio3G0qSocPhqkhUt/qffec=
 github.com/bytedance/sonic v1.11.6 h1:oUp34TzMlL+OY1OUWxHqsdkgC/Zfc85zGqw9siXjrc0=

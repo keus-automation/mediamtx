@@ -30,6 +30,7 @@ type PeerConnection struct {
 	API        *webrtc.API
 	Publish    bool
 	Log        logger.Writer
+	CameraId   string
 
 	wr                *webrtc.PeerConnection
 	stateChangeMutex  sync.Mutex
@@ -39,6 +40,7 @@ type PeerConnection struct {
 	done              chan struct{}
 	gatheringDone     chan struct{}
 	incomingTrack     chan trackRecvPair
+	talkbackInst      *TalkbackManager
 
 	ctx       context.Context
 	ctxCancel context.CancelFunc
@@ -83,13 +85,18 @@ func (co *PeerConnection) Start() error {
 		}
 
 		co.wr.OnTrack(func(track *webrtc.TrackRemote, receiver *webrtc.RTPReceiver) {
-			fmt.Println("Recived Track", track.Codec(), track.PayloadType())
-			initTalkback()
-			onAudioTrackHandler(co.wr, track)
-			// select {
-			// case co.incomingTrack <- trackRecvPair{track, receiver}:
-			// case <-co.ctx.Done():
-			// }
+			fmt.Println("Received Track", track.Codec(), track.PayloadType(), track.Kind(), webrtc.RTPCodecTypeAudio)
+
+			if track.Kind() == webrtc.RTPCodecTypeAudio {
+				talkbackInst, _ := InitTalkback(co.CameraId)
+				co.talkbackInst = talkbackInst
+				onAudioTrackHandler(co.wr, track, talkbackInst)
+			}
+
+			select {
+			case co.incomingTrack <- trackRecvPair{track, receiver}:
+			case <-co.ctx.Done():
+			}
 		})
 	}
 
@@ -115,9 +122,11 @@ func (co *PeerConnection) Start() error {
 
 		case webrtc.PeerConnectionStateDisconnected:
 			close(co.disconnected)
+			closeConnections(co.talkbackInst)
 
 		case webrtc.PeerConnectionStateClosed:
 			close(co.done)
+			closeConnections(co.talkbackInst)
 		}
 	})
 
@@ -174,12 +183,14 @@ func (co *PeerConnection) CreateFullAnswer(
 	ctx context.Context,
 	offer *webrtc.SessionDescription,
 ) (*webrtc.SessionDescription, error) {
+	fmt.Println("Offer is ", offer.SDP, offer.Type)
 	err := co.wr.SetRemoteDescription(*offer)
 	if err != nil {
 		return nil, err
 	}
 
 	answer, err := co.wr.CreateAnswer(nil)
+	fmt.Println("Answer is ", answer)
 	if err != nil {
 		return nil, err
 	}

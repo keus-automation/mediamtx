@@ -96,6 +96,9 @@ type Path struct {
 	SRTReadPassphrase          string         `json:"srtReadPassphrase"`
 	Fallback                   string         `json:"fallback"`
 
+	// Two Way Audio Params
+	CameraId string `json:"cameraId"`
+
 	// Record
 	Record                bool           `json:"record"`
 	Playback              *bool          `json:"playback,omitempty"` // deprecated

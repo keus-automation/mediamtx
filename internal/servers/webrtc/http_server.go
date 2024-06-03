@@ -178,6 +178,8 @@ func (s *httpServer) onWHIPPost(ctx *gin.Context, pathName string, publish bool)
 
 	user, pass, _ := ctx.Request.BasicAuth()
 
+	fmt.Println("This is whip/whep request", pathName)
+
 	res := s.parent.newSession(webRTCNewSessionReq{
 		pathName:   pathName,
 		remoteAddr: httpp.RemoteAddr(ctx),
@@ -301,6 +303,8 @@ func (s *httpServer) onRequest(ctx *gin.Context) {
 		ctx.Writer.WriteHeader(http.StatusNoContent)
 		return
 	}
+
+	fmt.Println("This is request", ctx.Request.URL.Path)
 
 	// WHIP/WHEP, outside session
 	if m := reWHIPWHEPNoID.FindStringSubmatch(ctx.Request.URL.Path); m != nil {

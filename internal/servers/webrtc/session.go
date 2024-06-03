@@ -23,6 +23,7 @@ import (
 
 	"github.com/bluenviron/mediamtx/internal/asyncwriter"
 	"github.com/bluenviron/mediamtx/internal/auth"
+	"github.com/bluenviron/mediamtx/internal/conf"
 	"github.com/bluenviron/mediamtx/internal/defs"
 	"github.com/bluenviron/mediamtx/internal/externalcmd"
 	"github.com/bluenviron/mediamtx/internal/hooks"
@@ -495,6 +496,27 @@ func (s *session) runPublish() (int, error) {
 	}
 }
 
+func (s *session) getPathConfig(pathName string, publish bool) (*conf.Path, error) {
+	ip, _, _ := net.SplitHostPort(s.req.remoteAddr)
+
+	pathConf, err := s.pathManager.FindPathConf(defs.PathFindPathConfReq{
+		AccessRequest: defs.PathAccessRequest{
+			Name:    pathName,
+			Query:   s.req.query,
+			Publish: publish,
+			IP:      net.ParseIP(ip),
+			User:    s.req.user,
+			Pass:    s.req.pass,
+			Proto:   auth.ProtocolWebRTC,
+		},
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	return pathConf, nil
+}
+
 func (s *session) runRead() (int, error) {
 	ip, _, _ := net.SplitHostPort(s.req.remoteAddr)
 
@@ -510,6 +532,7 @@ func (s *session) runRead() (int, error) {
 			ID:    &s.uuid,
 		},
 	})
+
 	if err != nil {
 		var terr1 auth.Error
 		if errors.As(err, &terr1) {
@@ -526,6 +549,13 @@ func (s *session) runRead() (int, error) {
 		return http.StatusBadRequest, err
 	}
 
+	pathConf, err1 := s.getPathConfig(s.req.pathName, s.req.publish)
+	if err1 != nil {
+		return http.StatusBadRequest, err
+	}
+
+	fmt.Println("This is configuration", pathConf.CameraId)
+
 	defer path.RemoveReader(defs.PathRemoveReaderReq{Author: s})
 
 	iceServers, err := s.parent.generateICEServers(false)
@@ -538,6 +568,7 @@ func (s *session) runRead() (int, error) {
 		API:        s.api,
 		Publish:    false,
 		Log:        s,
+		CameraId:   pathConf.CameraId,
 	}
 	err = pc.Start()
 	if err != nil {

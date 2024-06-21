@@ -169,6 +169,7 @@ func startFFMPEG(talkbackInst *TalkbackManager) error {
 		"-i", "pipe:0",
 		"-vn",
 		"-acodec", "aac_at",
+		// "-acodec", "libfdk_aac",
 		"-flush_packets", "1",
 		"-flags", "+global_header",
 		"-reset_timestamps", "1",

@@ -305,10 +305,14 @@ func (c *WHIPClient) postOffer(
 		return nil, err
 	}
 
+	fmt.Println("this is offer", sdp)
+
 	answer := &webrtc.SessionDescription{
 		Type: webrtc.SDPTypeAnswer,
 		SDP:  string(sdp),
 	}
+
+	fmt.Println("this is answer", answer)
 
 	return &whipPostOfferResponse{
 		Answer:   answer,
